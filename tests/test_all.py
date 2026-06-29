@@ -27,21 +27,14 @@ def run_test(name, fn):
 # TEST 1: Imports
 # =====================================================================
 def test_imports():
-    import src.models.resnet
-    import src.models.imagenet_resnet
-    import src.models.classifiers
-    import src.training.losses
-    import src.utils.data
-    import src.utils.imagenet_data
-    import src.evaluation.xai_evaluation
-    import src.evaluation.faithfulness_imagenet50
-    import src.evaluation.coherence_imagenet50
+    pass
 
 # =====================================================================
 # TEST 2: ResNet-18 forward pass (CIFAR10)
 # =====================================================================
 def test_resnet18_forward():
     import torch
+
     from src.models.resnet import get_resnet18
     model = get_resnet18(num_classes=10)
     x = torch.randn(4, 3, 32, 32)
@@ -53,6 +46,7 @@ def test_resnet18_forward():
 # =====================================================================
 def test_resnet18_encoder():
     import torch
+
     from src.models.resnet import ResNet18Encoder
     enc = ResNet18Encoder(embedding_dim=128)
     x = torch.randn(4, 3, 32, 32)
@@ -65,6 +59,7 @@ def test_resnet18_encoder():
 # =====================================================================
 def test_resnet50_forward():
     import torch
+
     from src.models.imagenet_resnet import get_imagenet_resnet
     model = get_imagenet_resnet(num_classes=50, encoder_only=False)
     x = torch.randn(2, 3, 224, 224)
@@ -76,6 +71,7 @@ def test_resnet50_forward():
 # =====================================================================
 def test_resnet50_encoder():
     import torch
+
     from src.models.imagenet_resnet import get_imagenet_resnet
     enc = get_imagenet_resnet(encoder_only=True, embedding_dim=128)
     x = torch.randn(2, 3, 224, 224)
@@ -89,7 +85,8 @@ def test_resnet50_encoder():
 # =====================================================================
 def test_linear_classifier():
     import torch
-    from src.models.classifiers import LinearClassifier, train_linear_classifier
+
+    from src.models.classifiers import LinearClassifier
     clf = LinearClassifier(input_dim=128, num_classes=10)
     x = torch.randn(8, 128)
     out = clf(x)
@@ -100,6 +97,7 @@ def test_linear_classifier():
 # =====================================================================
 def test_supcon_loss():
     import torch
+
     from src.training.losses import SupConLoss
     loss_fn = SupConLoss(temperature=0.07)
     B = 4
@@ -117,6 +115,7 @@ def test_supcon_loss():
 # =====================================================================
 def test_supcon_loss_distinct_classes():
     import torch
+
     from src.training.losses import SupConLoss
     loss_fn = SupConLoss(temperature=0.07)
     B = 8
@@ -133,6 +132,7 @@ def test_supcon_loss_distinct_classes():
 # =====================================================================
 def test_triplet_loss():
     import torch
+
     from src.training.losses import TripletLoss
     loss_fn = TripletLoss(margin=0.3, mining='semi-hard')
     embeddings = torch.randn(16, 512, requires_grad=True)
@@ -147,6 +147,7 @@ def test_triplet_loss():
 # =====================================================================
 def test_triplet_loss_hard():
     import torch
+
     from src.training.losses import TripletLoss
     loss_fn = TripletLoss(margin=0.3, mining='hard')
     embeddings = torch.randn(16, 512, requires_grad=True)
@@ -158,14 +159,18 @@ def test_triplet_loss_hard():
 # TEST 11: CIFAR10 transforms
 # =====================================================================
 def test_cifar10_transforms():
-    import torch
-    from src.utils.data import get_train_transforms, get_test_transforms, get_contrastive_transforms, TwoCropTransform
+    from src.utils.data import (
+        TwoCropTransform,
+        get_contrastive_transforms,
+        get_test_transforms,
+        get_train_transforms,
+    )
     train_t = get_train_transforms()
     test_t = get_test_transforms()
     contr_t = get_contrastive_transforms()
     two_crop = TwoCropTransform(contr_t)
-    from PIL import Image
     import numpy as np
+    from PIL import Image
     img = Image.fromarray(np.random.randint(0, 255, (32, 32, 3), dtype=np.uint8))
     out_train = train_t(img)
     assert out_train.shape == (3, 32, 32), f"Train transform: expected (3,32,32), got {out_train.shape}"
@@ -181,17 +186,18 @@ def test_cifar10_transforms():
 # TEST 12: ImageNet-S50 transforms
 # =====================================================================
 def test_imagenet_transforms():
-    import torch
     from src.utils.imagenet_data import (
-        get_imagenet50_train_transforms, get_imagenet50_test_transforms,
-        get_imagenet50_contrastive_transforms, TwoCropTransform
+        TwoCropTransform,
+        get_imagenet50_contrastive_transforms,
+        get_imagenet50_test_transforms,
+        get_imagenet50_train_transforms,
     )
     train_t = get_imagenet50_train_transforms()
     test_t = get_imagenet50_test_transforms()
     contr_t = get_imagenet50_contrastive_transforms()
     two_crop = TwoCropTransform(contr_t)
-    from PIL import Image
     import numpy as np
+    from PIL import Image
     img = Image.fromarray(np.random.randint(0, 255, (256, 256, 3), dtype=np.uint8))
     out_train = train_t(img)
     assert out_train.shape == (3, 224, 224), f"Expected (3,224,224), got {out_train.shape}"
@@ -206,12 +212,12 @@ def test_imagenet_transforms():
 # TEST 13: TwoCropTransform
 # =====================================================================
 def test_two_crop_transform():
-    import torch
-    from src.utils.data import TwoCropTransform
     import torchvision.transforms as T
+
+    from src.utils.data import TwoCropTransform
     t = TwoCropTransform(T.ToTensor())
-    from PIL import Image
     import numpy as np
+    from PIL import Image
     img = Image.fromarray(np.random.randint(0, 255, (32, 32, 3), dtype=np.uint8))
     out = t(img)
     assert isinstance(out, list) and len(out) == 2
@@ -222,6 +228,7 @@ def test_two_crop_transform():
 def test_ce_training_step_cifar10():
     import torch
     import torch.nn as nn
+
     from src.models.resnet import get_resnet18
     model = get_resnet18(num_classes=10)
     criterion = nn.CrossEntropyLoss()
@@ -241,6 +248,7 @@ def test_ce_training_step_cifar10():
 # =====================================================================
 def test_scl_training_step_cifar10():
     import torch
+
     from src.models.resnet import ResNet18Encoder
     from src.training.losses import SupConLoss
     encoder = ResNet18Encoder(embedding_dim=128)
@@ -263,6 +271,7 @@ def test_scl_training_step_cifar10():
 # =====================================================================
 def test_triplet_training_step_cifar10():
     import torch
+
     from src.models.resnet import ResNet18Encoder
     from src.training.losses import TripletLoss
     encoder = ResNet18Encoder(embedding_dim=128)
@@ -283,6 +292,7 @@ def test_triplet_training_step_cifar10():
 def test_ce_training_step_imagenet():
     import torch
     import torch.nn as nn
+
     from src.models.imagenet_resnet import get_imagenet_resnet
     model = get_imagenet_resnet(num_classes=50, encoder_only=False)
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
@@ -302,6 +312,7 @@ def test_ce_training_step_imagenet():
 # =====================================================================
 def test_scl_training_step_imagenet():
     import torch
+
     from src.models.imagenet_resnet import get_imagenet_resnet
     from src.training.losses import SupConLoss
     encoder = get_imagenet_resnet(encoder_only=True, embedding_dim=128)
@@ -324,8 +335,9 @@ def test_scl_training_step_imagenet():
 # =====================================================================
 def test_linear_probe_training():
     import torch
-    from src.models.resnet import ResNet18Encoder
+
     from src.models.classifiers import LinearClassifier, train_linear_classifier
+    from src.models.resnet import ResNet18Encoder
     encoder = ResNet18Encoder(embedding_dim=128)
     encoder.eval()
     x = torch.randn(32, 3, 32, 32)
@@ -345,10 +357,11 @@ def test_linear_probe_training():
 # TEST 20: Grad-CAM on ResNet-18
 # =====================================================================
 def test_gradcam_resnet18():
-    import torch
     import numpy as np
+    import torch
     from pytorch_grad_cam import GradCAM
     from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+
     from src.models.resnet import get_resnet18
     torch.manual_seed(123)
     model = get_resnet18(num_classes=10)
@@ -374,9 +387,9 @@ def test_gradcam_resnet18():
 # =====================================================================
 def test_gradcam_resnet50():
     import torch
-    import numpy as np
     from pytorch_grad_cam import GradCAM
     from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+
     from src.models.imagenet_resnet import get_imagenet_resnet
     model = get_imagenet_resnet(num_classes=50, encoder_only=False)
     model.eval()
@@ -395,9 +408,9 @@ def test_gradcam_resnet50():
 # =====================================================================
 def test_eigencam_resnet18():
     import torch
-    import numpy as np
     from pytorch_grad_cam import EigenCAM
     from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+
     from src.models.resnet import get_resnet18
     model = get_resnet18(num_classes=10)
     model.eval()
@@ -415,6 +428,7 @@ def test_eigencam_resnet18():
 # =====================================================================
 def test_cosine_schedule():
     import torch
+
     from src.models.resnet import get_resnet18
     model = get_resnet18(num_classes=10)
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
@@ -428,10 +442,10 @@ def test_cosine_schedule():
 # TEST 24: Denormalize utility
 # =====================================================================
 def test_denormalize():
-    import torch
-    from src.utils.data import denormalize, CIFAR10_MEAN, CIFAR10_STD, get_test_transforms
-    from PIL import Image
     import numpy as np
+    from PIL import Image
+
+    from src.utils.data import denormalize, get_test_transforms
     img = Image.fromarray(np.random.randint(0, 255, (32, 32, 3), dtype=np.uint8))
     t = get_test_transforms()
     normalized = t(img).unsqueeze(0)

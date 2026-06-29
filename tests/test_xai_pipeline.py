@@ -50,9 +50,13 @@ def test_quantus_imports():
 def test_xai_eval_function_signatures():
     """Verify evaluation functions have expected signatures."""
     import inspect
+
     from src.evaluation.xai_evaluation import (
-        evaluate_pixel_flipping, evaluate_continuity,
-        evaluate_contrastivity, evaluate_complexity, evaluate_sparseness
+        evaluate_complexity,
+        evaluate_continuity,
+        evaluate_contrastivity,
+        evaluate_pixel_flipping,
+        evaluate_sparseness,
     )
     for fn in [evaluate_pixel_flipping, evaluate_continuity,
                evaluate_contrastivity, evaluate_complexity, evaluate_sparseness]:
@@ -65,9 +69,12 @@ def test_xai_eval_function_signatures():
 def test_imagenet_eval_function_signatures():
     """Verify ImageNet evaluation functions have expected signatures."""
     import inspect
+
     from src.evaluation.faithfulness_imagenet50 import (
-        evaluate_pixel_flipping, evaluate_continuity,
-        evaluate_contrastivity, evaluate_complexity
+        evaluate_complexity,
+        evaluate_continuity,
+        evaluate_contrastivity,
+        evaluate_pixel_flipping,
     )
     for fn in [evaluate_pixel_flipping, evaluate_continuity,
                evaluate_contrastivity, evaluate_complexity]:
@@ -80,9 +87,8 @@ def test_imagenet_eval_function_signatures():
 def test_coherence_eval_function_signatures():
     """Verify coherence evaluation functions exist and have expected signatures."""
     import inspect
-    from src.evaluation.coherence_imagenet50 import (
-        create_image_loader, create_mask_loader, create_saliency_maps, load_model
-    )
+
+    from src.evaluation.coherence_imagenet50 import create_saliency_maps
     sig = inspect.signature(create_saliency_maps)
     params = list(sig.parameters.keys())
     assert 'cam_class' in params
@@ -93,7 +99,7 @@ def test_coherence_eval_function_signatures():
 def test_encoder_with_classifier_wrapper():
     """Verify the encoder+classifier pattern works for both CE and CL models."""
     import torch
-    import torch.nn as nn
+
     from src.models.imagenet_resnet import get_imagenet_resnet
 
     ce_model = get_imagenet_resnet(num_classes=50, encoder_only=False)
@@ -119,6 +125,7 @@ def test_cam_target_layer_consistency():
     import torch
     from pytorch_grad_cam import GradCAM
     from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+
     from src.models.resnet import get_resnet18
 
     model = get_resnet18(num_classes=10)
@@ -150,8 +157,9 @@ def test_training_script_imports():
 
 def test_config_files_parseable():
     """Verify all YAML config files are parseable."""
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_dir = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) / 'configs'
     expected_configs = ['ce_cifar10', 'scl_cifar10', 'triplet_cifar10',
                         'ce_imagenet50', 'scl_imagenet50', 'triplet_imagenet50']

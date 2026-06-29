@@ -3,10 +3,10 @@ Linear probe classifier for Supervised Contrastive Learning.
 After contrastive pretraining, a linear classifier is trained on frozen embeddings.
 """
 
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Optional, Dict
 
 
 class LinearClassifier(nn.Module):
@@ -32,13 +32,13 @@ def train_linear_classifier(
     classifier: LinearClassifier,
     train_embeddings: torch.Tensor,
     train_labels: torch.Tensor,
-    val_embeddings: Optional[torch.Tensor] = None,
-    val_labels: Optional[torch.Tensor] = None,
+    val_embeddings: torch.Tensor | None = None,
+    val_labels: torch.Tensor | None = None,
     epochs: int = 100,
     lr: float = 0.1,
     weight_decay: float = 1e-4,
     device: str = 'cuda'
-) -> Dict[str, list]:
+) -> dict[str, list]:
     """Train linear classifier on frozen embeddings using SGD."""
     classifier = classifier.to(device)
     train_embeddings = train_embeddings.to(device)

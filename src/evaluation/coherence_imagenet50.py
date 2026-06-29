@@ -17,16 +17,15 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import quantus
 import torch
 import torch.nn as nn
+from pytorch_grad_cam import EigenCAM, GradCAM
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 from tqdm import tqdm
-
-from pytorch_grad_cam import GradCAM, EigenCAM
-from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
-import quantus
 
 from src.models.imagenet_resnet import get_imagenet_resnet
 

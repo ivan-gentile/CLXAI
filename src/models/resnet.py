@@ -3,10 +3,10 @@ ResNet-18 implementation for CIFAR10 (32x32 images).
 Supports both Cross-Entropy and Contrastive Learning training.
 """
 
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Tuple
 
 
 class BasicBlock(nn.Module):
@@ -129,7 +129,7 @@ class ResNet18(nn.Module):
             features = F.normalize(features, dim=1)
         return features
 
-    def forward_with_embedding(self, x) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward_with_embedding(self, x) -> tuple[torch.Tensor, torch.Tensor]:
         features = self.encoder.forward_features(x)
         logits = self.fc(features)
         embeddings = F.normalize(features, dim=1)

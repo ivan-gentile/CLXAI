@@ -19,6 +19,7 @@ from pathlib import Path
 
 import cv2
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,7 +31,7 @@ from torchvision.datasets import ImageFolder
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from pytorch_grad_cam import GradCAM, EigenCAM
+from pytorch_grad_cam import EigenCAM, GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 

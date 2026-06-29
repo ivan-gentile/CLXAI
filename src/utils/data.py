@@ -2,11 +2,11 @@
 CIFAR10 data loading utilities.
 """
 
+
 import torch
-from torch.utils.data import DataLoader
 import torchvision
 import torchvision.transforms as transforms
-from typing import Tuple
+from torch.utils.data import DataLoader
 
 CIFAR10_MEAN = (0.4914, 0.4822, 0.4465)
 CIFAR10_STD = (0.2470, 0.2435, 0.2616)
@@ -14,6 +14,7 @@ CIFAR10_STD = (0.2470, 0.2435, 0.2616)
 
 class TwoCropTransform:
     """Create two augmented views of the same image for contrastive learning."""
+
     def __init__(self, base_transform):
         self.base_transform = base_transform
 
@@ -63,7 +64,7 @@ def get_cifar10_loaders(
     num_workers=4,
     augment=True,
     contrastive=False,
-) -> Tuple[DataLoader, DataLoader]:
+) -> tuple[DataLoader, DataLoader]:
     if contrastive:
         train_transform = TwoCropTransform(get_contrastive_transforms())
     else:

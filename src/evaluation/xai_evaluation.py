@@ -17,18 +17,15 @@ Usage:
 
 import argparse
 import os
-import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
-from tqdm import tqdm
-
-from pytorch_grad_cam import GradCAM, EigenCAM
-from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 import quantus
+import torch
+from pytorch_grad_cam import EigenCAM, GradCAM
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from tqdm import tqdm
 
 from src.models.resnet import get_resnet18
 from src.utils.data import get_cifar10_loaders

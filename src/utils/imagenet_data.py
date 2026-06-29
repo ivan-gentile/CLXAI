@@ -6,11 +6,10 @@ The 50 classes follow the ImageNet-S50 subset from Gao et al. (TPAMI 2022).
 """
 
 import os
-import torch
-from torch.utils.data import DataLoader, Dataset
+
 import torchvision.transforms as transforms
-from typing import Tuple, Optional, Callable, List
 from datasets import load_from_disk
+from torch.utils.data import DataLoader, Dataset
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -28,6 +27,7 @@ CLASS_MAPPING = {orig: new for new, orig in enumerate(SELECTED_CLASSES)}
 
 class TwoCropTransform:
     """Create two augmented views of the same image for contrastive learning."""
+
     def __init__(self, base_transform):
         self.base_transform = base_transform
     def __call__(self, x):
@@ -36,6 +36,7 @@ class TwoCropTransform:
 
 class GaussianBlur:
     """Gaussian blur augmentation (SimCLR/SupCon)."""
+
     def __init__(self, sigma=(0.1, 2.0)):
         self.sigma = sigma
     def __call__(self, x):
@@ -124,7 +125,7 @@ def get_imagenet50_loaders(
     num_workers=8,
     augment=True,
     contrastive=False,
-) -> Tuple[DataLoader, DataLoader]:
+) -> tuple[DataLoader, DataLoader]:
     train_hf = load_from_disk(os.path.join(data_dir, 'train'))
     val_hf = load_from_disk(os.path.join(data_dir, 'validation'))
 

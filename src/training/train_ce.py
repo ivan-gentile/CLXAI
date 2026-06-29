@@ -6,17 +6,17 @@ Usage:
 """
 
 import argparse
-import time
 import random
+import time
 from pathlib import Path
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import yaml
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from tqdm import tqdm
-import numpy as np
-import yaml
 
 from src.models.resnet import get_resnet18
 from src.utils.data import get_cifar10_loaders

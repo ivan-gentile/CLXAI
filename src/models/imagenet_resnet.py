@@ -3,11 +3,11 @@ ResNet-50 for ImageNet-S50 (224x224 images) using timm.
 Supports both Cross-Entropy and Supervised Contrastive Learning.
 """
 
+
+import timm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Tuple
-import timm
 
 
 class ResNet50ImageNet(nn.Module):
@@ -29,7 +29,7 @@ class ResNet50ImageNet(nn.Module):
             features = F.normalize(features, dim=1)
         return features
 
-    def forward_with_embedding(self, x) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward_with_embedding(self, x) -> tuple[torch.Tensor, torch.Tensor]:
         features = self.model.forward_features(x)
         features = self.model.global_pool(features)
         logits = self.model.fc(features)

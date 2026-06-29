@@ -8,19 +8,16 @@ Usage:
 """
 
 import argparse
-import os
-import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import quantus
 import torch
 import torch.nn as nn
-from tqdm import tqdm
-
-from pytorch_grad_cam import GradCAM, EigenCAM
+from pytorch_grad_cam import EigenCAM, GradCAM
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
-import quantus
+from tqdm import tqdm
 
 from src.models.imagenet_resnet import get_imagenet_resnet
 from src.utils.imagenet_data import get_imagenet50_loaders
@@ -28,6 +25,7 @@ from src.utils.imagenet_data import get_imagenet50_loaders
 
 class EncoderWithClassifier(nn.Module):
     """Wrapper combining contrastive encoder with linear classifier."""
+
     def __init__(self, encoder, linear_classifier):
         super().__init__()
         self.encoder = encoder

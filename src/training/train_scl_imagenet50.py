@@ -11,20 +11,19 @@ Usage:
 """
 
 import argparse
-import time
 import random
+import time
 from pathlib import Path
 
+import numpy as np
 import torch
-import torch.nn as nn
 import torch.optim as optim
+import yaml
 from torch.nn.parallel import DataParallel
 from tqdm import tqdm
-import numpy as np
-import yaml
 
-from src.models.imagenet_resnet import get_imagenet_resnet
 from src.models.classifiers import LinearClassifier, train_linear_classifier
+from src.models.imagenet_resnet import get_imagenet_resnet
 from src.training.losses import SupConLoss, TripletLoss
 from src.utils.imagenet_data import get_imagenet50_loaders
 
